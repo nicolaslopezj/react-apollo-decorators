@@ -1,0 +1,25 @@
+{
+  "name": "react-apollo-decorators",
+  "version": "0.0.1",
+  "description": "Better decorators for Apollo and React",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolaslopezj/react-apollo-decorators.git"
+  },
+  "keywords": [
+    "react",
+    "apollo",
+    "decorators",
+    "graphql"
+  ],
+  "author": "nicolaslopezj",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicolaslopezj/react-apollo-decorators/issues"
+  },
+  "homepage": "https://github.com/nicolaslopezj/react-apollo-decorators#readme"
+}
