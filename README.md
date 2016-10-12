@@ -4,7 +4,7 @@ Better decorators for Apollo and React.
 
 3 decorators that work on top of Apollo default decorator and make you code in a more *declarative* way.
 
-### ```withGraphQL```
+### ```@withGraphQL(query, options)```
 
 Use this decorator to make GraphQL ```query```.
 
@@ -14,7 +14,12 @@ Differences with apollo's ```graphql``` decorator:
 - Instead of getting the result of the query in the ```data``` prop of the component, you get each query variable as a prop.
 - The component will not be rendered until the query is loaded, instead it will show a Loading screen.
 
-### ```withMutation```
+- **query**: GraphQL document containing the query.
+- **options**: 
+  - **loading**: Loading component. Set to null to render the component when the query hasn't finish loading.
+  - Other options of apollo's ```graphql``` decorator.
+
+### ```@withMutation(mutation, options)```
 
 Use this decorator to make GraphQL ```mutation```.
 
@@ -24,9 +29,15 @@ Differences with apollo's ```graphql``` decorator:
 - The first argument of the ```mutate``` function are the variables, the seconds are the options.
 - The result of the mutation is return as directly in the function, not inside the data prop.
 
-### ```withFragment```
+- **mutation**: GraphQL document containing the mutation.
+- **options**: Options of apollo's ```graphql``` decorator.
+
+### ```@withFragment(fragment, fragments)```
 
 Use this decorator along with ```withGraphQL``` to use fragments.
+
+- **fragment**: GraphQL document containing the fragment.
+- **fragments**: Array of fragments used in this fragment definition.
 
 ## Example
 
@@ -37,6 +48,9 @@ render () {
 ```
 
 File ```Example.js```:
+
+This files receives the prop section and passes it directly to the query.
+It includes the fragment of the ```Content``` component.
 
 ```js
 import React from 'react'
@@ -72,6 +86,10 @@ export default class Example extends React.Component {
 ```
 
 File ```Content.js```:
+
+Using ```withFragment``` on this component adds the variables ```fragmentName``` which has to be 
+used in the query and the variable ```fragment``` which has to be passed in the ```fragments``` 
+option in ```withGraphQL```.
 
 ```js
 import React from 'react'
