@@ -1,6 +1,6 @@
 import {graphql} from 'react-apollo'
 import React from 'react'
-import filterObject from './helpers/filterObject'
+import filterObject from './filterObject'
 import {getFragments} from './withFragment'
 import _ from 'underscore'
 

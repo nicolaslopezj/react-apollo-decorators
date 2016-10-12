@@ -1,11 +1,28 @@
 import {graphql} from 'react-apollo'
 import React from 'react'
 import _ from 'underscore'
-import Loading from './components/loadings/Basic'
-import {listenToken, unlistenToken, getLoginToken} from './accounts/store'
-import autobind from 'autobind-decorator'
-import filterObject from './helpers/filterObject'
+import Loading from './Loading'
+import filterObject from './filterObject'
 import {getFragments} from './withFragment'
+
+let globalQueryIndex = 1
+const listeners = []
+
+const listenRefetch = function (callback) {
+  listeners.push(callback)
+}
+
+const unlistenRefetch = function (callback) {
+  var index = listeners.indexOf(callback)
+  if (index > -1) {
+    listeners.splice(index, 1)
+  }
+}
+
+export const refetchQueries = function () {
+  globalQueryIndex++
+  listeners.forEach(callback => callback())
+}
 
 const getPresentVariables = function (query) {
   const {definitions} = query
@@ -34,17 +51,21 @@ export default function (query, userOptions) {
         mutate: React.PropTypes.func
       }
 
+      constructor (props) {
+        super(props)
+        this.refetchQuery = this.refetchQuery.bind(this)
+      }
+
+      refetchQuery () {
+        this.props.data.refetch()
+      }
+
       componentWillMount () {
-        listenToken(this.refetchQuery)
+        listenRefetch(this.refetchQuery)
       }
 
       componentWillUnmount () {
-        unlistenToken(this.refetchQuery)
-      }
-
-      @autobind
-      refetchQuery () {
-        this.props.data.refetch()
+        unlistenRefetch(this.refetchQuery)
       }
 
       getMutate () {
@@ -82,7 +103,7 @@ export default function (query, userOptions) {
       render () {
         if (this.props.data && this.props.data.loading && options.loading) return this.renderLoading()
         if (this.props.data && this.props.data.error) return this.renderError()
-        return <ComposedComponent {...this.getPassProps()}/>
+        return <ComposedComponent {...this.getPassProps()} />
       }
 
     }
@@ -92,7 +113,7 @@ export default function (query, userOptions) {
       options: (props) => {
         const optionsVariables = options.variables || {}
         const variables = {..._.pick(props.params || {}, ...variablesInQuery), ..._.pick(props, ...variablesInQuery), ...optionsVariables}
-        variables.meteorLoginToken = getLoginToken()
+        variables.globalQueryIndex = globalQueryIndex
         return {
           ...options,
           fragments: getFragments(options.fragments),
