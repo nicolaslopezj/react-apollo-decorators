@@ -1,6 +1,6 @@
 {
   "name": "react-apollo-decorators",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Better decorators for Apollo and React",
   "author": "Nicolás López <nicolaslopezj@me.com>",
   "license": "MIT",
@@ -9,7 +9,8 @@
     "build": "babel ./src --out-dir ./lib",
     "prepublish": "npm run test && npm run build",
     "test": "npm run lint && jest",
-    "lint": "standard \"src/**/*.js\""
+    "lint": "standard \"src/**/*.js\"",
+    "watch": "watch npm\\ run\\ build ./src"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "graphql"
   ],
   "devDependencies": {
+    "apollo-client": "^0.4.20",
     "babel-cli": "6.5.1",
     "babel-eslint": "^5.0.0",
     "babel-jest": "^15.0.0",
@@ -34,6 +36,7 @@
     "eslint-plugin-react": "^3.16.1",
     "jest-cli": "^15.1.1",
     "react": ">=15.0.0",
+    "react-apollo": "^0.5.9",
     "standard": "*"
   },
   "dependencies": {
@@ -42,7 +45,8 @@
   },
   "peerDependencies": {
     "react": ">=15.0.0",
-    "apollo-client": "^0.4.19"
+    "apollo-client": "^0.4.20",
+    "react-apollo": "^0.5.9"
   },
   "jest": {
     "testPathIgnorePatterns": [
