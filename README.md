@@ -14,6 +14,8 @@ Differences with apollo's ```graphql``` decorator:
 - Instead of getting the result of the query in the ```data``` prop of the component, you get each query variable as a prop.
 - The component will not be rendered until the query is loaded, instead it will show a Loading screen.
 
+#### API
+
 ```js
 import withGraphQL from 'react-apollo-decorators/lib/withGraphQL'
 ```
@@ -33,6 +35,8 @@ Differences with apollo's ```graphql``` decorator:
 - The first argument of the ```mutate``` function are the variables, the seconds are the options.
 - The result of the mutation is return as directly in the function, not inside the data prop.
 
+#### API
+
 ```js
 import withMutation from 'react-apollo-decorators/lib/withMutation'
 ```
@@ -43,6 +47,8 @@ import withMutation from 'react-apollo-decorators/lib/withMutation'
 ### ```@withFragment(fragment, fragments)```
 
 Use this decorator along with ```withGraphQL``` to use fragments.
+
+#### API
 
 ```js
 import withFragment from 'react-apollo-decorators/lib/withFragment'
