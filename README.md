@@ -2,6 +2,9 @@
 
 Better decorators for Apollo and React.
 
+[![npm version](https://badge.fury.io/js/react-apollo-decorators.svg)](https://badge.fury.io/js/react-apollo-decorators)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
 3 decorators that work on top of Apollo default decorator and make you code in a more *declarative* way.
 
 ### ```@withGraphQL(query, options)```
