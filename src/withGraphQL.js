@@ -70,6 +70,7 @@ export default function (query, userOptions) {
 
       getMutate () {
         if (!this.props.mutate) return
+        console.warn('You should use withMutation decorator to use mutations.')
         const newMutate = (options, ...args) => {
           options.variables = filterObject(options.variables, '__typename')
           return this.props.mutate(options, ...args)
