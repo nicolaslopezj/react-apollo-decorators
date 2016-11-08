@@ -2,6 +2,10 @@
 
 ### vNEXT
 
+### v0.1.0
+
+- Error handling.
+
 ### v0.0.8
 
 - Improve default loading.

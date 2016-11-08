@@ -1,6 +1,6 @@
 {
   "name": "react-apollo-decorators",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Better decorators for Apollo and React",
   "author": "Nicolás López <nicolaslopezj@me.com>",
   "license": "MIT",
@@ -44,8 +44,8 @@
     "underscore": "^1.8.3"
   },
   "peerDependencies": {
-    "react": ">=15.0.0",
     "apollo-client": "^0.4.20",
+    "react": ">=15.0.0",
     "react-apollo": "^0.5.9"
   },
   "jest": {

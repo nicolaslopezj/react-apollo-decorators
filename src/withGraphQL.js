@@ -4,8 +4,9 @@ import _ from 'underscore'
 import Loading from './Loading'
 import filterObject from './filterObject'
 import {getFragments} from './withFragment'
+import ErrorComponent from './Error'
 
-let globalQueryIndex = 1
+let globalQueryIndex = 0
 const listeners = []
 
 const listenRefetch = function (callback) {
@@ -94,11 +95,7 @@ export default function (query, userOptions) {
       }
 
       renderError () {
-        return (
-          <div>
-            {this.props.data.error}
-          </div>
-        )
+        return <ErrorComponent error={this.props.data.error} />
       }
 
       render () {
@@ -114,7 +111,9 @@ export default function (query, userOptions) {
       options: (props) => {
         const optionsVariables = options.variables || {}
         const variables = {..._.pick(props.params || {}, ...variablesInQuery), ..._.pick(props, ...variablesInQuery), ...optionsVariables}
-        variables.globalQueryIndex = globalQueryIndex
+        if (globalQueryIndex) {
+          variables.globalQueryIndex = globalQueryIndex
+        }
         return {
           ...options,
           fragments: getFragments(options.fragments),
