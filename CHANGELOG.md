@@ -2,6 +2,10 @@
 
 ### vNEXT
 
+### v0.2.0
+
+- Force fetch default to true
+
 ### v0.1.0
 
 - Error handling.
