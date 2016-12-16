@@ -115,7 +115,6 @@ export default function (query, userOptions) {
           variables.globalQueryIndex = globalQueryIndex
         }
         return {
-          forceFetch: true,
           ...options,
           fragments: getFragments(options.fragments),
           variables
