@@ -14,9 +14,7 @@ export default class Loading extends React.Component {
     return {
       height: this.props.height,
       backgroundColor: '#EEEEEE',
-      borderRadius: 3,
-      marginTop: 10,
-      marginBottom: 10
+      borderRadius: 3
     }
   }
 

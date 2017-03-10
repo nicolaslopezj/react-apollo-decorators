@@ -2,6 +2,10 @@
 
 ### vNEXT
 
+### v1.0.0
+
+- Simplify withGraphQL internally.
+
 ### v0.2.0
 
 - Force fetch default to true
