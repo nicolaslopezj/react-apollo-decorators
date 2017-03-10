@@ -7,8 +7,8 @@
   "main": "./lib",
   "scripts": {
     "build": "babel ./src --out-dir ./lib",
-    "prepublish": "npm run test && npm run build",
-    "test": "npm run lint && jest",
+    "prepublish": "yarn run test && yarn run build",
+    "test": "jest",
     "lint": "standard \"src/**/*.js\"",
     "watch": "node watch.js"
   },
