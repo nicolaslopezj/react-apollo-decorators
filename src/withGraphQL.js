@@ -77,6 +77,7 @@ export default function (query, userOptions) {
 
     return withApollo(graphql(query, {
       props: ({ ownProps, data }) => ({
+        data,
         ...ownProps,
         ...data
       }),

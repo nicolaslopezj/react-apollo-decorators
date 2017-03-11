@@ -2,6 +2,10 @@
 
 ### vNEXT
 
+### v1.0.1
+
+- Make v1 backwards compatible.
+
 ### v1.0.0
 
 - Simplify withGraphQL internally.
