@@ -17,10 +17,11 @@ export default function (query, userOptions) {
     class GraphQLQuery extends React.Component {
 
       static propTypes = {
-        loading: React.PropTypes.bool,
+        networkStatus: React.PropTypes.number,
         error: React.PropTypes.object,
         refetch: React.PropTypes.func,
-        client: React.PropTypes.object
+        client: React.PropTypes.object,
+        data: React.PropTypes.object
       }
 
       componentDidUpdate (prevProps, prevState) {
@@ -68,7 +69,7 @@ export default function (query, userOptions) {
       }
 
       render () {
-        if (this.props.loading) return this.renderLoading()
+        if (this.props.networkStatus === 1 && Object.keys(this.props.data).length === 10) return this.renderLoading()
         if (this.props.error) return this.renderError()
         return this.renderComposed()
       }
