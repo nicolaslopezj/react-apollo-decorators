@@ -69,7 +69,7 @@ export default function (query, userOptions) {
       }
 
       render () {
-        if (this.props.networkStatus === 1 && Object.keys(this.props.data).length === 10) return this.renderLoading()
+        if ((this.props.networkStatus === 1 && Object.keys(this.props.data).length === 10) || this.props.networkStatus === 2) return this.renderLoading()
         if (this.props.error) return this.renderError()
         return this.renderComposed()
       }
