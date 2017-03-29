@@ -2,6 +2,10 @@
 
 ### vNEXT
 
+### v1.2.0
+
+- Dynamic queries.
+
 ### v1.0.1
 
 - Make v1 backwards compatible.

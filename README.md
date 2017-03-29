@@ -47,19 +47,15 @@ import withMutation from 'react-apollo-decorators/lib/withMutation'
 - **mutation**: GraphQL document containing the mutation.
 - **options**: Options of apollo's ```graphql``` decorator.
 
-### ```@withFragment(fragment, fragments)```
+### ```@dynamicQuery(getQuery, options)```
 
-Use this decorator along with ```withGraphQL``` to use fragments.
+Use this decorator to make queries that change with props.
 
 #### Usage
 
 ```js
-import withFragment from 'react-apollo-decorators/lib/withFragment'
+import dynamicQuery from 'react-apollo-decorators/lib/dynamicQuery'
 ```
 
-- **fragment**: GraphQL document containing the fragment.
-- **fragments**: Array of fragments used in this fragment definition.
-
-## Example
-
-Go to [EXAMPLE.md](https://github.com/nicolaslopezj/react-apollo-decorators/blob/master/EXAMPLE.md)
+- **getQuery**: A function that returns a GraphQL query in string format (not parsed).
+- **options**: Options of apollo's ```graphql``` decorator.

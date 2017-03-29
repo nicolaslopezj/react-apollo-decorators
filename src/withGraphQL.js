@@ -16,14 +16,6 @@ export default function (query, userOptions) {
   return function (ComposedComponent) {
     class GraphQLQuery extends React.Component {
 
-      static propTypes = {
-        networkStatus: React.PropTypes.number,
-        error: React.PropTypes.object,
-        refetch: React.PropTypes.func,
-        client: React.PropTypes.object,
-        data: React.PropTypes.object
-      }
-
       componentDidUpdate (prevProps, prevState) {
         const hasNetworkError = this.props.error && !!this.props.error.networkError
         const hadNetworkError = prevProps.error && !!prevProps.error.networkError
@@ -79,8 +71,8 @@ export default function (query, userOptions) {
     return withApollo(graphql(query, {
       props: ({ ownProps, data }) => ({
         data,
-        ...ownProps,
-        ...data
+        ...data,
+        ...ownProps
       }),
       options: props => {
         return {
