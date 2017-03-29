@@ -1,6 +1,6 @@
 {
   "name": "react-apollo-decorators",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Better decorators for Apollo and React",
   "author": "Nicolás López <nicolaslopezj@me.com>",
   "license": "MIT",
