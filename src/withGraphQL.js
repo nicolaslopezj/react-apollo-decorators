@@ -53,8 +53,8 @@ export default function (query, userOptions) {
       }
 
       renderNetworkError () {
-        if (options.networkErrorComponent) return options.networkErrorComponent
         if (options.loading) return options.loading
+        if (options.networkErrorComponent) return options.networkErrorComponent
         return this.renderComposed()
       }
 
