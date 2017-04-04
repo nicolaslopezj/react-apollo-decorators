@@ -1,12 +1,16 @@
-import {graphql, withApollo} from 'react-apollo'
+/* eslint-disable react/prop-types */
+import {graphql} from 'react-apollo'
 import React from 'react'
 import Loading from './Loading'
 import ErrorComponent from './Error'
-import NetworkError from './NetworkError'
 import getVariables from './getVariables'
+import sleep from './sleep'
+import debounce from 'lodash/debounce'
+import NetworkError from './NetworkError'
 
 const defaultOptions = {
   loading: <Loading />,
+  networkErrorComponent: <NetworkError />,
   fetchPolicy: 'cache-and-network',
   variables: {}
 }
@@ -16,19 +20,24 @@ export default function (query, userOptions) {
   return function (ComposedComponent) {
     class GraphQLQuery extends React.Component {
 
-      componentDidUpdate (prevProps, prevState) {
-        const hasNetworkError = this.props.error && !!this.props.error.networkError
-        const hadNetworkError = prevProps.error && !!prevProps.error.networkError
-        if (hasNetworkError && !hadNetworkError) {
-          this.interval = setInterval(async () => {
-            try {
-              await this.props.refetch()
-            } catch (error) {
-              console.log(error)
-            }
-          }, 3000)
-        } else if (!hasNetworkError && hadNetworkError) {
-          clearInterval(this.interval)
+      constructor (props) {
+        super(props)
+        this.debouncedTryRefetch = debounce(this.tryRefetch.bind(this), 1000)
+      }
+
+      componentDidUpdate () {
+        if (this.props.error && this.props.error.networkError) {
+          this.debouncedTryRefetch()
+        }
+      }
+
+      async tryRefetch () {
+        await sleep(1000)
+        if (!this.props.error || !this.props.error.networkError) return
+        try {
+          await this.props.refetch()
+        } catch (error) {
+          console.warn('Error refetching:', error)
         }
       }
 
@@ -44,7 +53,9 @@ export default function (query, userOptions) {
       }
 
       renderNetworkError () {
-        return <NetworkError />
+        if (options.networkErrorComponent) return options.networkErrorComponent
+        if (options.loading) return options.loading
+        return this.renderComposed()
       }
 
       renderError () {
@@ -68,7 +79,7 @@ export default function (query, userOptions) {
 
     }
 
-    return withApollo(graphql(query, {
+    return graphql(query, {
       props: ({ ownProps, data }) => ({
         data,
         ...data,
@@ -80,6 +91,6 @@ export default function (query, userOptions) {
           variables: getVariables(query, options, props)
         }
       }
-    })(GraphQLQuery))
+    })(GraphQLQuery)
   }
 }

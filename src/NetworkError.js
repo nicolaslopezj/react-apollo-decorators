@@ -26,7 +26,7 @@ export default class Error extends React.Component {
     return (
       <div style={styles.container}>
         <div style={styles.title}>Connection Error</div>
-        Try refreshing your browser
+        Trying to reconnect...
       </div>
     )
   }
