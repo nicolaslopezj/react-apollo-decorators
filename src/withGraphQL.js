@@ -79,7 +79,7 @@ export default function (query, userConfig) {
 
     }
 
-    return graphql(query, {
+    const FinalComponent = graphql(query, {
       ...config,
       props: ({ ownProps, data }) => ({
         _data: data,
@@ -97,5 +97,10 @@ export default function (query, userConfig) {
         }
       }
     })(GraphQLQuery)
+
+    FinalComponent.propTypes = ComposedComponent.propTypes
+    FinalComponent.defaultProps = ComposedComponent.defaultProps
+
+    return FinalComponent
   }
 }
