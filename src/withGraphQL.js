@@ -8,15 +8,15 @@ import sleep from './sleep'
 import debounce from 'lodash/debounce'
 import NetworkError from './NetworkError'
 
-const defaultOptions = {
+const defaultConfig = {
   loading: <Loading />,
   networkErrorComponent: <NetworkError />,
   fetchPolicy: 'cache-and-network',
-  variables: {}
+  options: {}
 }
 
-export default function (query, userOptions) {
-  const options = {...defaultOptions, ...userOptions}
+export default function (query, userConfig) {
+  const config = {...defaultConfig, ...userConfig}
   return function (ComposedComponent) {
     class GraphQLQuery extends React.Component {
 
@@ -48,13 +48,13 @@ export default function (query, userOptions) {
       }
 
       renderLoading () {
-        if (!options.loading) return this.renderComposed()
-        return options.loading
+        if (!config.loading) return this.renderComposed()
+        return config.loading
       }
 
       renderNetworkError () {
-        if (options.loading) return options.loading
-        if (options.networkErrorComponent) return options.networkErrorComponent
+        if (config.loading) return config.loading
+        if (config.networkErrorComponent) return config.networkErrorComponent
         return this.renderComposed()
       }
 
@@ -72,7 +72,7 @@ export default function (query, userOptions) {
       }
 
       render () {
-        if ((this.props.networkStatus === 1 && Object.keys(this.props.data).length === 10) || this.props.networkStatus === 2) return this.renderLoading()
+        if ((this.props.networkStatus === 1 && Object.keys(this.props._data).length === 10) || this.props.networkStatus === 2) return this.renderLoading()
         if (this.props.error) return this.renderError()
         return this.renderComposed()
       }
@@ -80,15 +80,20 @@ export default function (query, userOptions) {
     }
 
     return graphql(query, {
+      ...config,
       props: ({ ownProps, data }) => ({
-        data,
+        _data: data,
         ...data,
         ...ownProps
       }),
       options: props => {
+        const options = (typeof config.options === 'function' ? config.options(props) : config.options)
         return {
           ...options,
-          variables: getVariables(query, options, props)
+          variables: {
+            ...getVariables(query, config, props),
+            ...(options.variables || {})
+          }
         }
       }
     })(GraphQLQuery)
