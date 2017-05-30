@@ -19,7 +19,6 @@ export default function (query, userConfig) {
   const config = {...defaultConfig, ...userConfig}
   return function (ComposedComponent) {
     class GraphQLQuery extends React.Component {
-
       constructor (props) {
         super(props)
         this.debouncedTryRefetch = debounce(this.tryRefetch.bind(this), 1000)
@@ -76,15 +75,14 @@ export default function (query, userConfig) {
         if (this.props.error) return this.renderError()
         return this.renderComposed()
       }
-
     }
 
     const FinalComponent = graphql(query, {
       ...config,
       props: ({ ownProps, data }) => ({
         _data: data,
-        ...data,
-        ...ownProps
+        ...ownProps,
+        ...data
       }),
       options: props => {
         const options = (typeof config.options === 'function' ? config.options(props) : config.options)
