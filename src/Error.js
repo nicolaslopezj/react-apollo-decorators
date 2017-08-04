@@ -17,7 +17,6 @@ const styles = {
 }
 
 export default class Error extends React.Component {
-
   static propTypes = {
     error: React.PropTypes.object
   }
@@ -46,5 +45,4 @@ export default class Error extends React.Component {
       </div>
     )
   }
-
 }

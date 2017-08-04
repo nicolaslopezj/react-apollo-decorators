@@ -8,16 +8,15 @@ import sleep from './sleep'
 import debounce from 'lodash/debounce'
 import NetworkError from './NetworkError'
 
-const defaultConfig = {
-  loading: <Loading />,
-  networkErrorComponent: <NetworkError />,
-  fetchPolicy: 'cache-and-network',
-  options: {}
-}
-
 export default function (query, userConfig) {
-  const config = {...defaultConfig, ...userConfig}
   return function (ComposedComponent) {
+    const defaultConfig = {
+      loading: <Loading />,
+      networkErrorComponent: <NetworkError />,
+      fetchPolicy: 'cache-and-network',
+      options: {}
+    }
+    const config = {...defaultConfig, ...userConfig}
     class GraphQLQuery extends React.Component {
       constructor (props) {
         super(props)
@@ -48,12 +47,12 @@ export default function (query, userConfig) {
 
       renderLoading () {
         if (!config.loading) return this.renderComposed()
-        return config.loading
+        return global.apolloLoadingComponent || config.loading
       }
 
       renderNetworkError () {
-        if (config.loading) return config.loading
-        if (config.networkErrorComponent) return config.networkErrorComponent
+        if (config.loading) return this.renderLoading()
+        if (config.networkErrorComponent) return global.apolloErrorComponent || config.networkErrorComponent
         return this.renderComposed()
       }
 

@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 export default function (getQuery, userOptions) {
   return function (ComposedComponent) {
     class Composer extends React.Component {
-
       getComponent (props) {
         const query = getQuery(props)
         return withGraphQL(gql`${query}`, userOptions)(ComposedComponent)
@@ -24,7 +23,6 @@ export default function (getQuery, userOptions) {
       render () {
         return <this.component {...this.props} />
       }
-
     }
 
     return Composer

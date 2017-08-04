@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default class Loading extends React.Component {
-
   static propTypes = {
     height: React.PropTypes.number
   }
@@ -23,5 +22,4 @@ export default class Loading extends React.Component {
       <div style={this.getStyles()} />
     )
   }
-
 }
