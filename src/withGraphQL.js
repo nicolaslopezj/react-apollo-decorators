@@ -13,6 +13,7 @@ export default function (query, userConfig) {
     const defaultConfig = {
       loading: <Loading />,
       networkErrorComponent: <NetworkError />,
+      errorComponent: ErrorComponent,
       fetchPolicy: 'cache-and-network',
       options: {}
     }
@@ -47,25 +48,26 @@ export default function (query, userConfig) {
 
       renderLoading () {
         if (!config.loading) return this.renderComposed()
-        return global.apolloLoadingComponent || config.loading
+        return global.apolloLoadingComponent ? <global.apolloLoadingComponent /> : config.loading
       }
 
       renderNetworkError () {
-        if (config.loading) return this.renderLoading()
-        if (config.networkErrorComponent) return global.apolloErrorComponent || config.networkErrorComponent
+        if (!global.apolloNetworkErrorComponent && config.loading) return this.renderLoading()
+        if (config.networkErrorComponent) return global.apolloNetworkErrorComponent ? <global.apolloNetworkErrorComponent /> : config.networkErrorComponent
         return this.renderComposed()
       }
 
-      renderError () {
+      renderError (error) {
         if (this.props.error.networkError) return this.renderNetworkError()
-        return <ErrorComponent error={this.props.error} />
+        error = error || this.props.error
+        return global.apolloErrorComponent ? <global.apolloErrorComponent error={error} /> : <ErrorComponent error={error} />
       }
 
       renderComposed () {
         try {
           return <ComposedComponent {...this.props} />
         } catch (error) {
-          return <ErrorComponent error={error} />
+          return this.renderError(error)
         }
       }
 
