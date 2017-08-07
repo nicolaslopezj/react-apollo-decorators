@@ -36,7 +36,7 @@ export default function (query, userConfig) {
         try {
           await this.props.refetch()
         } catch (error) {
-          console.warn('Error refetching:', error)
+          console.log('Error refetching:', error)
         }
       }
 
