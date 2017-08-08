@@ -1,76 +1,33 @@
+/* eslint-disable react/prop-types */
 import {graphql} from 'react-apollo'
-import React from 'react'
 import filterObject from './filterObject'
-import {getFragments} from './withFragment'
-import _ from 'underscore'
+import cloneDeep from 'lodash/cloneDeep'
 
-const defaultOptions = {
-}
+export default function(query, userConfig) {
+  return function(ComposedComponent) {
+    const defaultConfig = {options: {}}
+    const config = {...defaultConfig, ...userConfig}
 
-export default function (query, userOptions) {
-  const options = {...defaultOptions, ...userOptions}
-
-  return function (ComposedComponent) {
-    class GraphQLContainer extends React.Component {
-
-      static propTypes = {
-        data: React.PropTypes.object,
-        mutate: React.PropTypes.func
-      }
-
-      getFunctionName () {
-        return query.definitions[0].name.value
-      }
-
-      getMutate () {
-        if (!this.props.mutate) return
-        const mutate = async (variables, options = {}, ...args) => {
-          options.variables = filterObject(variables, '__typename')
-          const result = await this.props.mutate(options, ...args)
-          return result.data
-        }
-        const props = {}
-        const mutationName = this.getFunctionName()
-        props[mutationName] = mutate
-        return props
-      }
-
-      getPassProps () {
-        return {
-          ..._.omit(this.props, 'mutate'),
-          ...this.getMutate()
-        }
-      }
-
-      renderLoading () {
-        return React.cloneElement(options.loading, this.getPassProps())
-      }
-
-      renderError () {
-        return (
-          <div>
-            {this.props.data.error}
-          </div>
-        )
-      }
-
-      render () {
-        return <ComposedComponent {...this.getPassProps()} />
-      }
-
+    const changeMutate = oldMutate => async (variables, options = {}, ...args) => {
+      options.variables = filterObject(cloneDeep(variables), '__typename')
+      const result = await oldMutate(options, ...args)
+      return result.data
     }
 
-    const container = graphql(query, {
-      options: (props) => {
+    const FinalComponent = graphql(query, {
+      ...config,
+      props: ({ownProps, mutate}) => {
+        const mutationName = query.definitions[0].name.value
         return {
-          ...options,
-          fragments: getFragments(options.fragments)
+          ...ownProps,
+          [mutationName]: changeMutate(mutate)
         }
       }
-    })(GraphQLContainer)
+    })(ComposedComponent)
 
-    container.propTypes = ComposedComponent.propTypes
+    FinalComponent.propTypes = ComposedComponent.propTypes
+    FinalComponent.defaultProps = ComposedComponent.defaultProps
 
-    return container
+    return FinalComponent
   }
 }

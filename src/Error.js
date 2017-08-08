@@ -21,20 +21,22 @@ export default class Error extends React.Component {
     error: React.PropTypes.object
   }
 
-  renderGraphQL () {
+  renderGraphQL() {
     return (
       <div style={styles.container}>
         <div style={styles.title}>GraphQL Error:</div>
         {this.props.error.graphQLErrors.map((error, index) => {
-          return <div key={index}>
-            {error.message}
-          </div>
+          return (
+            <div key={index}>
+              {error.message}
+            </div>
+          )
         })}
       </div>
     )
   }
 
-  render () {
+  render() {
     if (this.props.error.graphQLErrors) {
       return this.renderGraphQL()
     }

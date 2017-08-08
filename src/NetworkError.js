@@ -17,12 +17,11 @@ const styles = {
 }
 
 export default class Error extends React.Component {
-
   static propTypes = {
     error: React.PropTypes.object
   }
 
-  render () {
+  render() {
     return (
       <div style={styles.container}>
         <div style={styles.title}>Connection Error</div>
@@ -30,5 +29,4 @@ export default class Error extends React.Component {
       </div>
     )
   }
-
 }
