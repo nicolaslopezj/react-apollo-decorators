@@ -8,8 +8,8 @@ import sleep from './sleep'
 import debounce from 'lodash/debounce'
 import NetworkError from './NetworkError'
 
-export default function (query, userConfig) {
-  return function (ComposedComponent) {
+export default function(query, userConfig) {
+  return function(ComposedComponent) {
     const defaultConfig = {
       loading: <Loading />,
       networkErrorComponent: <NetworkError />,
@@ -19,18 +19,18 @@ export default function (query, userConfig) {
     }
     const config = {...defaultConfig, ...userConfig}
     class GraphQLQuery extends React.Component {
-      constructor (props) {
+      constructor(props) {
         super(props)
         this.debouncedTryRefetch = debounce(this.tryRefetch.bind(this), 1000)
       }
 
-      componentDidUpdate () {
+      componentDidUpdate() {
         if (this.props.error && this.props.error.networkError) {
           this.debouncedTryRefetch()
         }
       }
 
-      async tryRefetch () {
+      async tryRefetch() {
         await sleep(1000)
         if (!this.props.error || !this.props.error.networkError) return
         try {
@@ -40,30 +40,37 @@ export default function (query, userConfig) {
         }
       }
 
-      componentWillUnmount () {
+      componentWillUnmount() {
         if (this.interval) {
           clearInterval(this.interval)
         }
       }
 
-      renderLoading () {
+      renderLoading() {
         if (!config.loading) return this.renderComposed()
+        if (userConfig.loading) return config.loading
         return global.apolloLoadingComponent ? <global.apolloLoadingComponent /> : config.loading
       }
 
-      renderNetworkError () {
+      renderNetworkError() {
         if (!global.apolloNetworkErrorComponent && config.loading) return this.renderLoading()
-        if (config.networkErrorComponent) return global.apolloNetworkErrorComponent ? <global.apolloNetworkErrorComponent /> : config.networkErrorComponent
+        const globalComponent = global.apolloNetworkErrorComponent
+        const configComponent = config.networkErrorComponent
+        if (configComponent) return globalComponent ? <globalComponent /> : configComponent
         return this.renderComposed()
       }
 
-      renderError (error) {
+      renderError(error) {
         if (this.props.error.networkError) return this.renderNetworkError()
         error = error || this.props.error
-        return global.apolloErrorComponent ? <global.apolloErrorComponent error={error} /> : <ErrorComponent error={error} />
+        return global.apolloErrorComponent ? (
+          <global.apolloErrorComponent error={error} />
+        ) : (
+          <ErrorComponent error={error} />
+        )
       }
 
-      renderComposed () {
+      renderComposed() {
         try {
           return <ComposedComponent {...this.props} />
         } catch (error) {
@@ -71,8 +78,12 @@ export default function (query, userConfig) {
         }
       }
 
-      render () {
-        if ((this.props.networkStatus === 1 && Object.keys(this.props._data).length === 10) || this.props.networkStatus === 2) return this.renderLoading()
+      render() {
+        if (
+          (this.props.networkStatus === 1 && Object.keys(this.props._data).length === 10) ||
+          this.props.networkStatus === 2
+        )
+          return this.renderLoading()
         if (this.props.error) return this.renderError()
         return this.renderComposed()
       }
@@ -80,13 +91,14 @@ export default function (query, userConfig) {
 
     const FinalComponent = graphql(query, {
       ...config,
-      props: ({ ownProps, data }) => ({
+      props: ({ownProps, data}) => ({
         _data: data,
         ...ownProps,
         ...data
       }),
       options: props => {
-        const options = (typeof config.options === 'function' ? config.options(props) : config.options)
+        const options =
+          typeof config.options === 'function' ? config.options(props) : config.options
         return {
           ...options,
           variables: {
