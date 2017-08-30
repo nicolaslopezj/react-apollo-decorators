@@ -8,7 +8,7 @@ import sleep from './sleep'
 import debounce from 'lodash/debounce'
 import NetworkError from './NetworkError'
 
-export default function(query, userConfig) {
+export default function(query, userConfig = {}) {
   return function(ComposedComponent) {
     const defaultConfig = {
       loading: <Loading />,
