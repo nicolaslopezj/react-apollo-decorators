@@ -82,8 +82,10 @@ export default function(query, userConfig = {}) {
         if (
           (this.props.networkStatus === 1 && Object.keys(this.props._data).length === 10) ||
           this.props.networkStatus === 2
-        )
+        ) {
           return this.renderLoading()
+        }
+
         if (this.props.error) return this.renderError()
         return this.renderComposed()
       }
