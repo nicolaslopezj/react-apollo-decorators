@@ -27,6 +27,7 @@ export default function(query, userConfig) {
 
     FinalComponent.propTypes = ComposedComponent.propTypes
     FinalComponent.defaultProps = ComposedComponent.defaultProps
+    FinalComponent.navigationOptions = ComposedComponent.navigationOptions
 
     return FinalComponent
   }
