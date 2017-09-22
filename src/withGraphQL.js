@@ -13,9 +13,7 @@ export default function(query, userConfig = {}) {
     const defaultConfig = {
       loading: <Loading />,
       networkErrorComponent: <NetworkError />,
-      errorComponent: ErrorComponent,
-      fetchPolicy: 'cache-and-network',
-      options: {}
+      errorComponent: ErrorComponent
     }
     const config = {...defaultConfig, ...userConfig}
     class GraphQLQuery extends React.Component {
@@ -99,13 +97,17 @@ export default function(query, userConfig = {}) {
         ...data
       }),
       options: props => {
-        const options =
-          typeof config.options === 'function' ? config.options(props) : config.options
+        const options = config.options
+        const userOptions = (typeof options === 'function' ? options(props) : options) || {}
+        if (userOptions.pollInterval && !userOptions.fetchPolicy) {
+          userOptions.fetchPolicy = 'network-only'
+        }
         return {
-          ...options,
+          fetchPolicy: 'cache-and-network', // default option
+          ...userOptions,
           variables: {
             ...getVariables(query, config, props),
-            ...(options.variables || {})
+            ...(userOptions.variables || {})
           }
         }
       }
