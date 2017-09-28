@@ -1,15 +1,16 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class Loading extends React.Component {
   static propTypes = {
-    height: React.PropTypes.number
+    height: PropTypes.number
   }
 
   static defaultProps = {
     height: 200
   }
 
-  getStyles () {
+  getStyles() {
     return {
       height: this.props.height,
       backgroundColor: '#EEEEEE',
@@ -17,9 +18,7 @@ export default class Loading extends React.Component {
     }
   }
 
-  render () {
-    return (
-      <div style={this.getStyles()} />
-    )
+  render() {
+    return <div style={this.getStyles()} />
   }
 }

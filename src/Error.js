@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const styles = {
   container: {
@@ -18,7 +19,7 @@ const styles = {
 
 export default class Error extends React.Component {
   static propTypes = {
-    error: React.PropTypes.object
+    error: PropTypes.object
   }
 
   renderGraphQL() {
@@ -26,11 +27,7 @@ export default class Error extends React.Component {
       <div style={styles.container}>
         <div style={styles.title}>GraphQL Error:</div>
         {this.props.error.graphQLErrors.map((error, index) => {
-          return (
-            <div key={index}>
-              {error.message}
-            </div>
-          )
+          return <div key={index}>{error.message}</div>
         })}
       </div>
     )

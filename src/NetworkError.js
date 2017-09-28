@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const styles = {
   container: {
@@ -18,7 +19,7 @@ const styles = {
 
 export default class Error extends React.Component {
   static propTypes = {
-    error: React.PropTypes.object
+    error: PropTypes.object
   }
 
   render() {
