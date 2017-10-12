@@ -1,6 +1,6 @@
 {
   "name": "react-apollo-decorators",
-  "version": "1.4.24",
+  "version": "1.4.25",
   "description": "Better decorators for Apollo and React",
   "author": "Nicolás López <nicolaslopezj@me.com>",
   "license": "MIT",
@@ -16,7 +16,12 @@
     "type": "git",
     "url": "git+https://github.com/nicolaslopezj/react-apollo-decorators.git"
   },
-  "keywords": ["react", "apollo", "decorators", "graphql"],
+  "keywords": [
+    "react",
+    "apollo",
+    "decorators",
+    "graphql"
+  ],
   "devDependencies": {
     "apollo-client": "^1.9.3",
     "babel-cli": "^6.26.0",
@@ -49,10 +54,19 @@
     "react-apollo": "^1.4.11"
   },
   "jest": {
-    "testPathIgnorePatterns": ["/node_modules/", "/lib"]
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/lib"
+    ]
   },
   "standard": {
-    "globals": ["it", "xit", "expect", "test", "jest"],
+    "globals": [
+      "it",
+      "xit",
+      "expect",
+      "test",
+      "jest"
+    ],
     "parser": "babel-eslint"
   }
 }

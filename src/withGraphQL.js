@@ -16,7 +16,6 @@ export default function(query, userConfig = {}) {
       tryRefetch: 1000
     }
     const config = {...defaultConfig, ...userConfig}
-    console.log('try refetch', config.tryRefetch)
     class GraphQLQuery extends React.Component {
       constructor(props) {
         super(props)
@@ -57,7 +56,6 @@ export default function(query, userConfig = {}) {
         const GlobalComponent = global.apolloNetworkErrorComponent
         const ConfigComponent = userConfig.networkErrorComponent
         if (ConfigComponent !== null) {
-          console.log('will render', !!GlobalComponent)
           if (ConfigComponent) return <ConfigComponent />
           return GlobalComponent ? <GlobalComponent /> : <NetworkError />
         }
