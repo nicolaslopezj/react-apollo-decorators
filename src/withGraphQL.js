@@ -12,14 +12,15 @@ export default function(query, userConfig = {}) {
   return function(ComposedComponent) {
     const defaultConfig = {
       loading: <Loading />,
-      networkErrorComponent: <NetworkError />,
-      errorComponent: ErrorComponent
+      errorComponent: ErrorComponent,
+      tryRefetch: 1000
     }
     const config = {...defaultConfig, ...userConfig}
+    console.log('try refetch', config.tryRefetch)
     class GraphQLQuery extends React.Component {
       constructor(props) {
         super(props)
-        this.debouncedTryRefetch = debounce(this.tryRefetch.bind(this), 1000)
+        this.debouncedTryRefetch = debounce(this.tryRefetch.bind(this), config.tryRefetch)
       }
 
       componentDidUpdate() {
@@ -29,7 +30,8 @@ export default function(query, userConfig = {}) {
       }
 
       async tryRefetch() {
-        await sleep(1000)
+        if (!config.tryRefetch) return
+        await sleep(config.tryRefetch)
         if (!this.props.error || !this.props.error.networkError) return
         try {
           await this.props.refetch()
@@ -52,15 +54,19 @@ export default function(query, userConfig = {}) {
 
       renderNetworkError() {
         if (!global.apolloNetworkErrorComponent && config.loading) return this.renderLoading()
-        const globalComponent = global.apolloNetworkErrorComponent
-        const configComponent = config.networkErrorComponent
-        if (configComponent) return globalComponent ? <globalComponent /> : configComponent
+        const GlobalComponent = global.apolloNetworkErrorComponent
+        const ConfigComponent = userConfig.networkErrorComponent
+        if (ConfigComponent !== null) {
+          console.log('will render', !!GlobalComponent)
+          if (ConfigComponent) return <ConfigComponent />
+          return GlobalComponent ? <GlobalComponent /> : <NetworkError />
+        }
         return this.renderComposed()
       }
 
       renderError(error) {
-        if (this.props.error.networkError) return this.renderNetworkError()
         error = error || this.props.error
+        if (error.networkError) return this.renderNetworkError()
         return global.apolloErrorComponent ? (
           <global.apolloErrorComponent error={error} />
         ) : (
