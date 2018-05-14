@@ -17,6 +17,15 @@ export default function(query, options, props) {
     }
 
     if (
+      props.match &&
+      props.match.params &&
+      typeof props.match.params[variable.name.value] !== 'undefined'
+    ) {
+      variables[variable.name.value] = props.match.params[variable.name.value]
+      continue
+    }
+
+    if (
       props.navigation &&
       props.navigation.state &&
       props.navigation.state.params &&
