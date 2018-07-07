@@ -4,8 +4,6 @@ import React from 'react'
 import Loading from './Loading'
 import ErrorComponent from './Error'
 import getVariables from './getVariables'
-import sleep from './sleep'
-import debounce from 'lodash/debounce'
 import NetworkError from './NetworkError'
 
 export default function(query, userConfig = {}) {
@@ -13,36 +11,13 @@ export default function(query, userConfig = {}) {
     const defaultConfig = {
       loading: <Loading />,
       errorComponent: ErrorComponent,
-      tryRefetch: 1000
+      tryRefetch: 0
     }
+
     const config = {...defaultConfig, ...userConfig}
     class GraphQLQuery extends React.Component {
-      constructor(props) {
-        super(props)
-        this.debouncedTryRefetch = debounce(this.tryRefetch.bind(this), config.tryRefetch)
-      }
-
-      componentDidUpdate() {
-        if (this.props.error && this.props.error.networkError) {
-          this.debouncedTryRefetch()
-        }
-      }
-
-      async tryRefetch() {
-        if (!config.tryRefetch) return
-        await sleep(config.tryRefetch)
-        if (!this.props.error || !this.props.error.networkError) return
-        try {
-          await this.props.refetch()
-        } catch (error) {
-          console.log('Error refetching:', error)
-        }
-      }
-
-      componentWillUnmount() {
-        if (this.interval) {
-          clearInterval(this.interval)
-        }
+      hasData() {
+        return Object.keys(this.props._data).length > 10
       }
 
       renderLoading() {
@@ -52,6 +27,7 @@ export default function(query, userConfig = {}) {
       }
 
       renderNetworkError() {
+        if (this.hasData()) return this.renderComposed()
         if (!global.apolloNetworkErrorComponent && config.loading) return this.renderLoading()
         const GlobalComponent = global.apolloNetworkErrorComponent
         const ConfigComponent = userConfig.networkErrorComponent
@@ -81,10 +57,7 @@ export default function(query, userConfig = {}) {
       }
 
       render() {
-        if (
-          (this.props.networkStatus === 1 && Object.keys(this.props._data).length === 10) ||
-          this.props.networkStatus === 2
-        ) {
+        if ((this.props.networkStatus === 1 && !this.hasData()) || this.props.networkStatus === 2) {
           return this.renderLoading()
         }
 
@@ -93,7 +66,7 @@ export default function(query, userConfig = {}) {
       }
     }
 
-    const FinalComponent = graphql(query, {
+    const WithGraphQL = graphql(query, {
       ...config,
       props: ({ownProps, data}) => ({
         _data: data,
@@ -117,10 +90,10 @@ export default function(query, userConfig = {}) {
       }
     })(GraphQLQuery)
 
-    FinalComponent.propTypes = ComposedComponent.propTypes
-    FinalComponent.defaultProps = ComposedComponent.defaultProps
-    FinalComponent.navigationOptions = ComposedComponent.navigationOptions
+    WithGraphQL.propTypes = ComposedComponent.propTypes
+    WithGraphQL.defaultProps = ComposedComponent.defaultProps
+    WithGraphQL.navigationOptions = ComposedComponent.navigationOptions
 
-    return FinalComponent
+    return WithGraphQL
   }
 }
