@@ -2,6 +2,11 @@
 
 ### vNEXT
 
+### v2.0.0
+
+- Different handle of network errors.
+- withSubscription HoC.
+
 ### v1.2.0
 
 - Dynamic queries.
