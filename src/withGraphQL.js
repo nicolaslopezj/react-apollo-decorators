@@ -22,7 +22,7 @@ export default function(query, userConfig = {}) {
 
       renderLoading() {
         if (!config.loading) return this.renderComposed()
-        if (userConfig.loading) return config.loading+
+        if (userConfig.loading) return config.loading
         return global.apolloLoadingComponent ? <global.apolloLoadingComponent /> : config.loading
       }
 
