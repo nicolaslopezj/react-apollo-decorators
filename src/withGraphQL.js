@@ -22,7 +22,7 @@ export default function(query, userConfig = {}) {
 
       renderLoading() {
         if (!config.loading) return this.renderComposed()
-        if (userConfig.loading) return config.loading
+        if (userConfig.loading) return config.loading+
         return global.apolloLoadingComponent ? <global.apolloLoadingComponent /> : config.loading
       }
 
@@ -57,7 +57,7 @@ export default function(query, userConfig = {}) {
       }
 
       render() {
-        if ((this.props.networkStatus === 1 && !this.hasData()) || this.props.networkStatus === 2) {
+        if (this.props.networkStatus < 7 && !this.hasData()) {
           return this.renderLoading()
         }
 
