@@ -23,14 +23,14 @@ export default function(subscription, functionName, config) {
         this.startSubscription()
       }
 
-      componentWillReceiveProps(nextProps, nextContext) {
-        const currentVariables = getVariables(subscription, config, this.props)
-        const nextVariables = getVariables(subscription, config, nextProps)
+      componentDidUpdate(prevProps, prevState) {
+        const currentVariables = getVariables(subscription, config, prevProps)
+        const nextVariables = getVariables(subscription, config, this.props)
         if (isEqual(currentVariables, nextVariables)) {
           return
         }
 
-        this.initialize(nextProps)
+        this.initialize(this.props)
         this.startSubscription()
       }
 
