@@ -23,9 +23,15 @@ export default function(subscription, functionName, config) {
         this.startSubscription()
       }
 
+      getVariables(subscription, config, props) {
+        return config && config.getVariables
+          ? config.getVariables(props)
+          : getVariables(subscription, config, props)
+      }
+
       componentDidUpdate(prevProps, prevState) {
-        const currentVariables = getVariables(subscription, config, prevProps)
-        const nextVariables = getVariables(subscription, config, this.props)
+        const currentVariables = this.getVariables(subscription, config, prevProps)
+        const nextVariables = this.getVariables(subscription, config, this.props)
         if (isEqual(currentVariables, nextVariables)) {
           return
         }
@@ -43,7 +49,7 @@ export default function(subscription, functionName, config) {
         if (this.queryObservable) return
         this.queryObservable = this.client.subscribe({
           query: subscription,
-          variables: getVariables(subscription, config, props)
+          variables: this.getVariables(subscription, config, props)
         })
       }
 
@@ -85,6 +91,10 @@ export default function(subscription, functionName, config) {
         return <ComposedComponent ref="child" {...this.props} />
       }
     }
+
+    WithSubscription.propTypes = ComposedComponent.propTypes
+    WithSubscription.defaultProps = ComposedComponent.defaultProps
+    WithSubscription.navigationOptions = ComposedComponent.navigationOptions
 
     return withApollo(WithSubscription)
   }
