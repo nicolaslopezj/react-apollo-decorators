@@ -59,15 +59,16 @@ export default function(query, userConfig = {}) {
       }
 
       render() {
-        if (this.props.networkStatus === 1) {
+        const {networkStatus, error} = this.props
+        if (networkStatus === 1) {
           return this.renderLoading()
         }
 
-        if (this.props.networkStatus < 7 && !this.hasData()) {
+        if (networkStatus < 7 && !this.hasData()) {
           return this.renderLoading()
         }
 
-        if (this.props.error) {
+        if (error) {
           return this.renderError()
         }
 
@@ -91,7 +92,8 @@ export default function(query, userConfig = {}) {
           userOptions.fetchPolicy = 'network-only'
         }
         return {
-          fetchPolicy: 'cache-and-network', // default option
+          notifyOnNetworkStatusChange: true,
+          // fetchPolicy: 'cache-and-network', // default option
           ...userOptions,
           variables: {
             ...getVariables(query, config, props),
