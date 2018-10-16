@@ -23,6 +23,7 @@ export default function(query, userConfig = {}) {
       renderLoading() {
         if (!config.loading) return this.renderComposed()
         if (userConfig.loading) return config.loading
+        // eslint-disable-next-line
         return global.apolloLoadingComponent ? <global.apolloLoadingComponent /> : config.loading
       }
 
@@ -42,6 +43,7 @@ export default function(query, userConfig = {}) {
         error = error || this.props.error
         if (error.networkError) return this.renderNetworkError()
         return global.apolloErrorComponent ? (
+          // eslint-disable-next-line
           <global.apolloErrorComponent error={error} />
         ) : (
           <ErrorComponent error={error} />
@@ -57,22 +59,31 @@ export default function(query, userConfig = {}) {
       }
 
       render() {
+        if (this.props.networkStatus === 1) {
+          return this.renderLoading()
+        }
+
         if (this.props.networkStatus < 7 && !this.hasData()) {
           return this.renderLoading()
         }
 
-        if (this.props.error) return this.renderError()
+        if (this.props.error) {
+          return this.renderError()
+        }
+
         return this.renderComposed()
       }
     }
 
     const WithGraphQL = graphql(query, {
       ...config,
-      props: ({ownProps, data}) => ({
-        _data: data,
-        ...ownProps,
-        ...data
-      }),
+      props: ({ownProps, data}) => {
+        return {
+          _data: data,
+          ...ownProps,
+          ...data
+        }
+      },
       options: props => {
         const options = config.options
         const userOptions = (typeof options === 'function' ? options(props) : options) || {}
