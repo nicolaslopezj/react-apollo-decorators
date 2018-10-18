@@ -93,7 +93,7 @@ export default function(query, userConfig = {}) {
         }
         return {
           notifyOnNetworkStatusChange: true,
-          // fetchPolicy: 'cache-and-network', // default option
+          fetchPolicy: 'cache-and-network', // default option
           ...userOptions,
           variables: {
             ...getVariables(query, config, props),
